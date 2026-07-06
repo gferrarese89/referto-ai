@@ -23,7 +23,8 @@
       "Bash(curl -s -o /dev/null -m 3 -w '%{http_code}' http://127.0.0.1:8642/)",
       "Bash(git commit -m 'LICENSE \\(tutti i diritti riservati\\) e intestazioni di copyright *)",
       "Bash(git push *)",
-      "Bash(curl -s https://gferrarese89.github.io/referto-ai/)"
+      "Bash(curl -s https://gferrarese89.github.io/referto-ai/)",
+      "Bash(curl -s -o /dev/null -w 'LICENSE su GitHub: %{http_code}\\\\n' https://github.com/gferrarese89/referto-ai/blob/main/LICENSE)"
     ]
   }
 }

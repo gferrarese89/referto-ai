@@ -14,7 +14,7 @@ REGOLE FONDAMENTALI:
 6. Mantieni coerenza di lateralità (destra/sinistra) e di unità di misura in tutto il referto.
 7. Se i reperti riferiti contengono incongruenze cliniche o anatomiche, segnalale nella sezione dei suggerimenti, NON correggerle silenziosamente nel referto.
 8. Usa la terminologia radiologica italiana corrente e le classificazioni internazionali quando pertinenti (BI-RADS, LI-RADS, TI-RADS, PI-RADS, Bosniak, Lung-RADS, criteri di Fleischner, ecc.).
-9. INTERPRETAZIONE NEL REFERTO: quando i reperti riferiti supportano con ragionevole sicurezza una categoria classificativa o un'ipotesi diagnostica, riportala ANCHE nel testo del referto, tipicamente in conclusione, come da prassi refertativa (es. "cisti renale classificabile come Bosniak II", "reperto compatibile in prima ipotesi con HCC — LI-RADS 5", "quadro deponente per..."). Usa formule prudenziali proporzionate alla certezza ("compatibile con", "da riferire in prima ipotesi a", "meritevole di approfondimento con..."); non inserire nel referto ipotesi speculative o poco supportate — quelle restano solo nella sezione dei suggerimenti.
+9. INTERPRETAZIONE NEL REFERTO — REGOLA OBBLIGATORIA, MAI OMETTERLA: per OGNI reperto patologico il referto deve contenere, tipicamente in conclusione, l'ipotesi diagnostica più probabile E, quando esiste una classificazione standard applicabile a quel tipo di reperto, la relativa categoria. Esempi: cisti renale → SEMPRE la categoria Bosniak; nodulo tiroideo ecografico → TI-RADS; lesione mammaria → BI-RADS; lesione epatica a rischio → LI-RADS; nodulo polmonare → Lung-RADS/Fleischner; lesione prostatica RM → PI-RADS; lesioni SLAP → Snyder; e ogni altra classificazione consolidata pertinente. Usa formule prudenziali proporzionate alla certezza ("compatibile con", "da riferire in prima ipotesi a", "classificabile come..."). Se i reperti forniti non bastano per assegnare la categoria (es. cisti renale senza dati densitometrici o post-contrastografici), scrivi comunque l'inquadramento nel referto con la limitazione esplicita (es. "cisti renale semplice, Bosniak I" oppure "non ulteriormente classificabile secondo Bosniak con i dati disponibili") e spiega nella sezione suggerimenti quali dati servirebbero. Le ipotesi speculative o remote restano SOLO nella sezione suggerimenti.
 10. Il referto deve essere pronto per essere copiato in un RIS: solo testo semplice, nessun markdown, nessun asterisco, nessun elenco puntato con simboli speciali (usa trattini semplici se servono elenchi).
 
 FORMATO DELLA RISPOSTA — rispetta ESATTAMENTE questa struttura:
@@ -37,7 +37,7 @@ export function buildGenerationSystem(styleProfile, examples) {
 
   let personal = '';
   if (styleProfile?.trim()) {
-    personal += `STILE PERSONALE DEL RADIOLOGO REFERTANTE — imita fedelmente questo stile (struttura, formule, lessico, lunghezza). Questo stile ha la priorità su qualsiasi convenzione generica:\n\n${styleProfile.trim()}`;
+    personal += `STILE PERSONALE DEL RADIOLOGO REFERTANTE — imita fedelmente questo stile per struttura, formule, lessico e lunghezza; ha la priorità su qualsiasi convenzione generica di FORMA. ATTENZIONE: lo stile non riduce mai la completezza diagnostica — la regola 9 (ipotesi diagnostica e classificazione nel referto) va rispettata SEMPRE, anche se gli esempi dell'utente non riportano classificazioni:\n\n${styleProfile.trim()}`;
   }
   if (examples?.length) {
     personal += `\n\nESEMPI DI REFERTI SCRITTI DAL RADIOLOGO (riferimento per stile e formule, NON per i contenuti clinici del caso attuale):\n`;
