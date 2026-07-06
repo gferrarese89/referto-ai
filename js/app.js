@@ -6,7 +6,7 @@ import * as sync from './sync.js';
 import { streamMessage, ApiError } from './api.js';
 import { buildGenerationSystem, buildGenerationMessage, createReportStreamParser } from './prompts.js';
 import { initWizard, startWizard } from './wizard.js';
-import { showView, toast, applyTheme, copyPlainText } from './ui.js';
+import { showView, toast, applyTheme, copyPlainText, initPasswordToggles } from './ui.js';
 
 // ---------- Stato ----------
 let abortController = null;
@@ -17,6 +17,7 @@ let lastGeneration = null; // { modality, district } per "Impara da questo"
 async function boot() {
   const settings = storage.getSettings();
   applyTheme(settings.theme);
+  initPasswordToggles();
 
   await db.migrateFromLocalStorage(); // migrazione esempi v1 → IndexedDB
 

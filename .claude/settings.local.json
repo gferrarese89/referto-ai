@@ -17,7 +17,10 @@
       "Bash(git init *)",
       "Bash(git config *)",
       "Bash(git add *)",
-      "Bash(git commit -m 'RefertoAI — refertazione radiologica assistita da AI *)"
+      "Bash(git commit -m 'RefertoAI — refertazione radiologica assistita da AI *)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(curl -s -o /dev/null -m 3 -w '%{http_code}' http://127.0.0.1:8642/)"
     ]
   }
 }
