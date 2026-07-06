@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // api.js — chiamate dirette browser → API Claude (Anthropic), con streaming SSE.
 // Nessun server intermedio: i dati viaggiano solo tra questo browser e api.anthropic.com.
 

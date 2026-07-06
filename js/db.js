@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // db.js — archivio referti su IndexedDB (localStorage è troppo piccolo per centinaia di referti).
 // Ogni referto: { id, modality, district, title, text, source: 'wizard'|'manual', addedAt, updatedAt }
 

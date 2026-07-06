@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // sync.js — sincronizzazione opzionale del profilo tra dispositivi tramite Gist segreto GitHub.
 // Cosa viene sincronizzato: profilo di stile, archivio referti (anonimizzati), modello/tema.
 // Cosa NON viene MAI sincronizzato: chiave API Claude e token GitHub.

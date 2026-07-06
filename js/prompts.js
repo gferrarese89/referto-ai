@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // prompts.js — costruzione dei prompt per la generazione dei referti e per l'analisi dello stile.
 
 // ---------- System prompt di base (statico → cacheable) ----------

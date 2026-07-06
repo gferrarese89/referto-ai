@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // storage.js — persistenza locale (localStorage/sessionStorage per dati piccoli,
 // IndexedDB via db.js per l'archivio referti) e export/import del profilo.
 // Nessun dato lascia il dispositivo tranne le chiamate all'API Claude e, se attivata, la sync su Gist.

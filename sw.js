@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // sw.js — service worker: cache della shell dell'app (network-first con fallback cache).
 // Le chiamate all'API Claude NON passano mai da qui (dominio diverso, sempre rete).
 

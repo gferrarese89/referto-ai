@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // extract.js — estrazione del testo da file .txt, .docx e .doc, senza dipendenze esterne.
 
 /**

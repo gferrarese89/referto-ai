@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // ui.js — utilità di interfaccia: viste, toast, tema.
 
 export function showView(id) {

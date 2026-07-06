@@ -96,6 +96,10 @@ La chiave API di Claude e il token GitHub **non vengono mai sincronizzati** (res
 - L'app non salva referti né reperti su disco; gli unici dati persistiti sono il profilo di stile e gli esempi che salvi esplicitamente.
 - ⚕️ Il referto generato è una **bozza**: la responsabilità clinica del contenuto resta del medico refertante. Rileggi sempre prima di firmare.
 
+## Licenza
+
+© 2026 Goffredo Ferrarese — **Tutti i diritti riservati.** È consentito solo l'uso personale tramite il sito ufficiale; sono vietate copia, modifica, ripubblicazione e uso commerciale senza autorizzazione scritta. Vedi il file [LICENSE](LICENSE).
+
 ## Roadmap (fasi successive)
 
 - 🎙 Dettatura integrata con lessico medico (Whisper eseguito nel browser via WebAssembly — nessuna installazione)

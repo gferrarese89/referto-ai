@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // wizard.js — onboarding: chiave API + apprendimento dello stile di refertazione.
 // Supporta corpora grandi (analisi a blocchi con consolidamento) e upload .txt/.docx/.doc.
 

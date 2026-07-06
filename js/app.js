@@ -1,3 +1,4 @@
+/* RefertoAI — © 2026 Goffredo Ferrarese. Tutti i diritti riservati. Vedi file LICENSE. */
 // app.js — bootstrap dell'applicazione e logica della vista principale e delle impostazioni.
 
 import * as storage from './storage.js';
