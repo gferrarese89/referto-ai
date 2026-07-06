@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1a56db">
+  <title>RefertoAI — Refertazione radiologica assistita</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩻</text></svg>">
+  <link rel="apple-touch-icon" href="icon-180.png">
+</head>
+<body>
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="logo">🩻</span>
+      <h1>RefertoAI</h1>
+    </div>
+    <div class="topbar-right">
+      <button id="btn-theme" class="icon-btn" title="Tema chiaro/scuro">🌓</button>
+      <button id="btn-settings" class="icon-btn" title="Impostazioni">⚙️</button>
+    </div>
+  </header>
+
+  <!-- ============ BANNER PRIVACY ============ -->
+  <div id="privacy-banner" class="privacy-banner">
+    ⚠️ Non inserire dati identificativi del paziente (nome, data di nascita, numero di cartella).
+    <button id="btn-privacy-ok" class="link-btn">Ho capito</button>
+  </div>
+
+  <main id="app">
+
+    <!-- ============ VISTA WIZARD ============ -->
+    <section id="view-wizard" class="view" hidden>
+      <div class="wizard-card">
+
+        <!-- Step 1: chiave API -->
+        <div class="wizard-step" data-step="1">
+          <h2>Benvenuto in RefertoAI</h2>
+          <p>Questa app genera referti radiologici nel <strong>tuo</strong> stile a partire dai reperti che scrivi.
+             Per funzionare ha bisogno di una chiave API di Anthropic (Claude).</p>
+          <details class="help-box">
+            <summary>Come creare la chiave API (2 minuti)</summary>
+            <ol>
+              <li>Vai su <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> e crea un account.</li>
+              <li>Aggiungi un metodo di pagamento (si paga a consumo: pochi centesimi per referto).</li>
+              <li>Consigliato: in <em>Settings → Limits</em> imposta un limite di spesa mensile (es. 20 $).</li>
+              <li>In <em>API Keys</em> clicca <em>Create Key</em> e copia la chiave (inizia con <code>sk-ant-</code>).</li>
+            </ol>
+          </details>
+          <label for="wizard-api-key">Chiave API</label>
+          <input type="password" id="wizard-api-key" placeholder="sk-ant-..." autocomplete="off">
+          <label class="checkbox-label">
+            <input type="checkbox" id="wizard-remember-key" checked>
+            Ricorda la chiave su questo dispositivo <small>(deseleziona sui PC condivisi: verrà chiesta a ogni sessione)</small>
+          </label>
+          <div class="wizard-nav">
+            <span></span>
+            <button id="wizard-next-1" class="btn-primary">Avanti →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: incolla referti -->
+        <div class="wizard-step" data-step="2" hidden>
+          <h2>Insegnami il tuo stile</h2>
+          <p>Incolla qui sotto i tuoi referti (ecografie, RX, TC, RM, mammografie — misti va benissimo), <strong>quanti ne vuoi</strong>: più sono, più i referti generati saranno fedeli al tuo stile.
+             Separa un referto dall'altro con una riga di soli trattini: <code>-----</code></p>
+          <p>Oppure carica direttamente uno o più file con dentro tutti i referti:</p>
+          <div class="actions" style="margin-top:0">
+            <button id="wizard-file-btn" class="btn-secondary">📄 Carica file (.txt, .docx, .doc)</button>
+            <input type="file" id="wizard-files" accept=".txt,.doc,.docx,text/plain" multiple hidden>
+          </div>
+          <p class="muted">⚠️ Rimuovi o oscura i dati del paziente prima di analizzare. Il testo caricato appare qui sotto: controllalo e ripuliscilo liberamente.</p>
+          <textarea id="wizard-reports" rows="16" placeholder="ECOGRAFIA ADDOME SUPERIORE&#10;Fegato di dimensioni regolari...&#10;-----&#10;RX TORACE&#10;Non lesioni pleuro-parenchimali in atto..."></textarea>
+          <p class="muted" id="wizard-corpus-info"></p>
+          <div class="wizard-nav">
+            <button class="btn-secondary wizard-back">← Indietro</button>
+            <div>
+              <button id="wizard-skip" class="btn-secondary">Salta per ora</button>
+              <button id="wizard-analyze" class="btn-primary">Analizza il mio stile</button>
+            </div>
+          </div>
+          <div id="wizard-progress" class="progress-box" hidden>
+            <div class="spinner"></div>
+            <span id="wizard-progress-text">Analisi in corso…</span>
+          </div>
+        </div>
+
+        <!-- Step 3: revisione profilo -->
+        <div class="wizard-step" data-step="3" hidden>
+          <h2>Il tuo profilo di stile</h2>
+          <p>Ho analizzato i tuoi referti. Rivedi e correggi liberamente la descrizione del tuo stile — sarà usata per ogni referto generato.</p>
+          <textarea id="wizard-style-profile" rows="14"></textarea>
+          <p class="muted" id="wizard-examples-summary"></p>
+          <div class="wizard-nav">
+            <button class="btn-secondary wizard-back">← Indietro</button>
+            <button id="wizard-finish" class="btn-primary">Salva e inizia ✓</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ VISTA PRINCIPALE ============ -->
+    <section id="view-main" class="view" hidden>
+      <div class="main-grid">
+
+        <!-- Colonna input -->
+        <div class="card input-card">
+          <h2>Reperti</h2>
+          <div class="row">
+            <div class="field">
+              <label for="sel-modality">Modalità</label>
+              <select id="sel-modality">
+                <option value="auto">Auto-rileva</option>
+                <option value="Ecografia">Ecografia</option>
+                <option value="RX">RX</option>
+                <option value="TC">TC</option>
+                <option value="RM">RM</option>
+                <option value="Mammografia">Mammografia</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="inp-district">Distretto</label>
+              <input type="text" id="inp-district" placeholder="es. addome, torace, encefalo…" list="district-list">
+              <datalist id="district-list">
+                <option value="addome"><option value="torace"><option value="encefalo">
+                <option value="collo / tiroide"><option value="rachide"><option value="pelvi">
+                <option value="mammella"><option value="ginocchio"><option value="spalla">
+              </datalist>
+            </div>
+          </div>
+          <div class="field">
+            <label for="inp-clinical">Quesito clinico / anamnesi <span class="muted">(opzionale)</span></label>
+            <input type="text" id="inp-clinical" placeholder="es. dolore in ipocondrio destro, sospetta colelitiasi">
+          </div>
+          <div class="field">
+            <label for="inp-findings">Reperti <span class="muted">(scrivi o detta col microfono di sistema — Win+H su Windows, 🎤 tastiera su iPhone)</span></label>
+            <textarea id="inp-findings" rows="10" placeholder="es. lesione focale epatica al VI segmento di 2 cm, ipervascolare in fase arteriosa con washout in fase venosa. Colecisti alitiasica. Resto negativo."></textarea>
+          </div>
+          <div class="actions">
+            <button id="btn-generate" class="btn-primary btn-lg">✨ Genera referto</button>
+            <button id="btn-stop" class="btn-secondary" hidden>■ Interrompi</button>
+            <button id="btn-clear" class="btn-secondary">Pulisci</button>
+          </div>
+          <div id="gen-status" class="status-line" hidden></div>
+        </div>
+
+        <!-- Colonna output -->
+        <div class="output-col">
+          <div class="card report-card">
+            <div class="card-header">
+              <h2>Referto</h2>
+              <div>
+                <button id="btn-learn" class="btn-secondary" title="Salva questo referto (dopo le tue correzioni) come esempio del tuo stile">📚 Impara da questo</button>
+                <button id="btn-copy" class="btn-primary">📋 Copia referto</button>
+              </div>
+            </div>
+            <textarea id="report-editor" rows="18" placeholder="Il referto generato apparirà qui. Puoi modificarlo liberamente prima di copiarlo nel RIS."></textarea>
+          </div>
+
+          <div class="card ddx-card">
+            <div class="card-header">
+              <h2>💡 Diagnosi differenziali e suggerimenti</h2>
+            </div>
+            <div id="ddx-panel" class="ddx-content muted">Le diagnosi differenziali e i suggerimenti di approfondimento appariranno qui (non vengono copiati nel RIS).</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ VISTA IMPOSTAZIONI ============ -->
+    <section id="view-settings" class="view" hidden>
+      <div class="settings-card card">
+        <div class="card-header">
+          <h2>Impostazioni</h2>
+          <button id="btn-settings-close" class="btn-secondary">← Torna ai referti</button>
+        </div>
+
+        <h3>Chiave API</h3>
+        <div class="row">
+          <input type="password" id="set-api-key" placeholder="sk-ant-..." autocomplete="off">
+          <button id="btn-save-key" class="btn-primary">Salva</button>
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" id="set-remember-key">
+          Ricorda su questo dispositivo
+        </label>
+
+        <h3>Modello AI</h3>
+        <select id="set-model">
+          <option value="claude-opus-4-8">Claude Opus 4.8 — massima qualità (consigliato)</option>
+          <option value="claude-sonnet-5">Claude Sonnet 5 — più economico</option>
+        </select>
+
+        <h3>Profilo di stile</h3>
+        <textarea id="set-style-profile" rows="10" placeholder="Nessun profilo. Usa il wizard per crearlo."></textarea>
+        <div class="actions">
+          <button id="btn-save-style" class="btn-primary">Salva profilo</button>
+          <button id="btn-rerun-wizard" class="btn-secondary">🧙 Riallena lo stile (wizard)</button>
+        </div>
+
+        <h3>Archivio referti (esempi di stile)</h3>
+        <div id="examples-list" class="examples-list"></div>
+
+        <h3>Sincronizzazione tra dispositivi</h3>
+        <p class="muted">Sincronizza automaticamente profilo di stile e archivio referti tra Mac, iPhone e PC di lavoro tramite un Gist <strong>segreto</strong> del tuo account GitHub (gratuito). La chiave API di Claude e il token GitHub non vengono mai sincronizzati.</p>
+        <details class="help-box">
+          <summary>Come creare il token GitHub (2 minuti)</summary>
+          <ol>
+            <li>Vai su <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">github.com/settings/tokens/new</a> (token <em>classic</em>).</li>
+            <li>Nome a piacere (es. "RefertoAI"), scadenza consigliata: 1 anno.</li>
+            <li>Seleziona <strong>solo</strong> lo scope <code>gist</code> — nient'altro.</li>
+            <li>Clicca <em>Generate token</em> e copia il token (inizia con <code>ghp_</code>).</li>
+            <li>Incolla lo stesso token su ogni dispositivo: si agganceranno allo stesso profilo.</li>
+          </ol>
+        </details>
+        <div class="row">
+          <input type="password" id="set-gist-token" placeholder="ghp_..." autocomplete="off">
+          <button id="btn-save-gist-token" class="btn-primary">Salva</button>
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" id="set-sync-enabled">
+          Sincronizzazione automatica attiva
+        </label>
+        <div class="actions">
+          <button id="btn-sync-now" class="btn-secondary">🔄 Sincronizza ora</button>
+          <span id="sync-status" class="status-line" style="margin:0;align-self:center"></span>
+        </div>
+
+        <h3>Portabilità manuale</h3>
+        <p class="muted">In alternativa alla sincronizzazione: esporta il profilo (stile, archivio, impostazioni — senza chiavi) su file e importalo su un altro dispositivo.</p>
+        <div class="actions">
+          <button id="btn-export" class="btn-secondary">⬇️ Esporta profilo</button>
+          <button id="btn-import" class="btn-secondary">⬆️ Importa profilo</button>
+          <input type="file" id="import-file" accept="application/json" hidden>
+        </div>
+
+        <h3 class="danger-title">Zona pericolosa</h3>
+        <button id="btn-reset" class="btn-danger">Cancella tutti i dati da questo dispositivo</button>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

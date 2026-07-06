@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 \"/private/tmp/claude-501/-Users-goffredoferrarese-Reporting-software/faacccf2-6236-43c8-9fa7-7cb91044b3be/scratchpad/make_icons.py\")",
+      "Bash(which deno *)",
+      "Read(//System/Volumes/Preboot/Cryptexes/OS/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/**)",
+      "Bash(/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc -m test_parsers.js)",
+      "Bash(python3 -m http.server 8642 --bind 127.0.0.1)",
+      "Bash(open \"http://127.0.0.1:8642\")",
+      "Bash(/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc -m test_v2.js)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(brew --version)",
+      "Bash(brew install *)",
+      "Bash(open \"https://github.com/login/device\")",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'RefertoAI — refertazione radiologica assistita da AI *)"
+    ]
+  }
+}
