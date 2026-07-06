@@ -308,6 +308,18 @@ button { font-family: inherit; cursor: pointer; }
   background: none; border: none; color: var(--danger); font-size: 15px;
 }
 
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 24px 20px calc(16px + env(safe-area-inset-bottom));
+  max-width: 720px;
+  margin: 0 auto;
+}
+.footer p { margin: 2px 0; }
+
 /* ---------- Toast ---------- */
 .toast {
   position: fixed;
